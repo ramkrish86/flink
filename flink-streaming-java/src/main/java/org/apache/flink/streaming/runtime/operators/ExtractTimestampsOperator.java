@@ -22,6 +22,7 @@ import org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator;
 import org.apache.flink.streaming.api.operators.ChainingStrategy;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
 /**
@@ -34,8 +35,8 @@ import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
  *             {@link TimestampsAndPunctuatedWatermarksOperator}.
  */
 @Deprecated
-public class ExtractTimestampsOperator<T>
-		extends AbstractUdfStreamOperator<T, TimestampExtractor<T>>
+public class ExtractTimestampsOperator<T, K, W extends Window>
+		extends AbstractUdfStreamOperator<T, TimestampExtractor<T>, K, W>
 		implements OneInputStreamOperator<T, T>, Triggerable {
 
 	private static final long serialVersionUID = 1L;

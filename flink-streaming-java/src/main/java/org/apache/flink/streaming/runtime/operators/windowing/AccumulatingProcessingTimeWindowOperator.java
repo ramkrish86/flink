@@ -32,8 +32,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @Internal
-public class AccumulatingProcessingTimeWindowOperator<KEY, IN, OUT> 
-		extends AbstractAlignedProcessingTimeWindowOperator<KEY, IN, OUT, ArrayList<IN>, WindowFunction<IN, OUT, KEY, TimeWindow>> {
+public class AccumulatingProcessingTimeWindowOperator<KEY, IN, OUT, K, W extends Window>
+		extends AbstractAlignedProcessingTimeWindowOperator<KEY, IN, OUT, ArrayList<IN>, WindowFunction<IN, OUT, KEY, TimeWindow>, K, W> {
 
 	private static final long serialVersionUID = 7305948082830843475L;
 

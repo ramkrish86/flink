@@ -21,6 +21,7 @@ package org.apache.flink.streaming.runtime.tasks;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.operators.StreamSource;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 
 /**
  * Task for executing streaming sources.
@@ -37,7 +38,7 @@ import org.apache.flink.streaming.api.operators.StreamSource;
  * @param <OP> Type of the stream source operator
  */
 @Internal
-public class SourceStreamTask<OUT, SRC extends SourceFunction<OUT>, OP extends StreamSource<OUT, SRC>>
+public class SourceStreamTask<OUT, SRC extends SourceFunction<OUT>, K, W extends Window, OP extends StreamSource<OUT, SRC, K, W>>
 	extends StreamTask<OUT, OP> {
 
 	@Override

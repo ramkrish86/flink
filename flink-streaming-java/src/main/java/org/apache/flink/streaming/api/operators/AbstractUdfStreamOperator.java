@@ -31,6 +31,11 @@ import org.apache.flink.runtime.state.CheckpointListener;
 import org.apache.flink.streaming.api.checkpoint.Checkpointed;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.runtime.state.AbstractStateBackend;
+import org.apache.flink.streaming.api.watermark.BaseTimer;
+import org.apache.flink.streaming.api.watermark.EventTimeFunction;
+import org.apache.flink.streaming.api.watermark.WindowTimer;
+import org.apache.flink.streaming.api.windowing.triggers.Trigger;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.streaming.runtime.tasks.StreamTask;
 import org.apache.flink.streaming.runtime.tasks.StreamTaskState;
@@ -48,20 +53,25 @@ import static java.util.Objects.requireNonNull;
  *            The type of the user function
  */
 @PublicEvolving
-public abstract class AbstractUdfStreamOperator<OUT, F extends Function> extends AbstractStreamOperator<OUT> implements OutputTypeConfigurable<OUT> {
+public abstract class AbstractUdfStreamOperator<OUT, F extends Function, K, W extends Window>
+	extends AbstractStreamOperator<OUT> implements OutputTypeConfigurable<OUT> {
 
 	private static final long serialVersionUID = 1L;
 	
 	
 	/** the user function */
 	protected final F userFunction;
+
+	protected EventTimeFunction eventTimeFunction;
 	
 	/** Flag to prevent duplicate function.close() calls in close() and dispose() */
 	private transient boolean functionsClosed = false;
 	
-	
 	public AbstractUdfStreamOperator(F userFunction) {
 		this.userFunction = requireNonNull(userFunction);
+		if(this.userFunction instanceof EventTimeFunction) {
+			this.eventTimeFunction = (EventTimeFunction) userFunction;
+		}
 	}
 
 	/**
@@ -71,6 +81,8 @@ public abstract class AbstractUdfStreamOperator<OUT, F extends Function> extends
 	public F getUserFunction() {
 		return userFunction;
 	}
+
+	public EventTimeFunction getEventTimeFunction() { return this.eventTimeFunction; }
 	
 	// ------------------------------------------------------------------------
 	//  operator life cycle
@@ -207,5 +219,13 @@ public abstract class AbstractUdfStreamOperator<OUT, F extends Function> extends
 	 */
 	public Configuration getUserFunctionParameters() {
 		return new Configuration();
+	}
+
+	public WindowTimer getTimer(long timestamp, Trigger.TriggerContext context) {
+		return new BaseTimer<K, W>(timestamp, key, window);
+	}
+
+	public WindowTimer getTimer(long timestamp, K key, W window) {
+		return new BaseTimer<K, W>(timestamp, key, window);
 	}
 }

@@ -38,7 +38,7 @@ public class SinkTransformation<T> extends StreamTransformation<Object> {
 
 	private final StreamTransformation<T> input;
 
-	private final StreamSink<T> operator;
+	private final StreamSink<T, ?, ?> operator;
 
 	// We need this because sinks can also have state that is partitioned by key
 	private KeySelector<T, ?> stateKeySelector;
@@ -56,7 +56,7 @@ public class SinkTransformation<T> extends StreamTransformation<Object> {
 	public SinkTransformation(
 			StreamTransformation<T> input,
 			String name,
-			StreamSink<T> operator,
+			StreamSink<T, ?, ?> operator,
 			int parallelism) {
 		super(name, TypeExtractor.getForClass(Object.class), parallelism);
 		this.input = input;
@@ -73,7 +73,7 @@ public class SinkTransformation<T> extends StreamTransformation<Object> {
 	/**
 	 * Returns the {@link StreamSink} that is the operator of this {@code SinkTransformation}.
 	 */
-	public StreamSink<T> getOperator() {
+	public StreamSink<T, ?, ?> getOperator() {
 		return operator;
 	}
 

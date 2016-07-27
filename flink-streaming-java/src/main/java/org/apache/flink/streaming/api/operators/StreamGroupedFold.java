@@ -31,11 +31,12 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.core.memory.DataInputViewStreamWrapper;
 import org.apache.flink.core.memory.DataOutputViewStreamWrapper;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
 @Internal
-public class StreamGroupedFold<IN, OUT, KEY>
-		extends AbstractUdfStreamOperator<OUT, FoldFunction<IN, OUT>>
+public class StreamGroupedFold<IN, OUT, KEY, K, W extends Window>
+		extends AbstractUdfStreamOperator<OUT, FoldFunction<IN, OUT>, K, W>
 		implements OneInputStreamOperator<IN, OUT>, OutputTypeConfigurable<OUT> {
 
 	private static final long serialVersionUID = 1L;

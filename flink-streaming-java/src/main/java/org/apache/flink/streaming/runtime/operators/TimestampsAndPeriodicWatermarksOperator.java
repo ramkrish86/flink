@@ -22,6 +22,7 @@ import org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator;
 import org.apache.flink.streaming.api.operators.ChainingStrategy;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
 /**
@@ -30,8 +31,8 @@ import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
  *
  * @param <T> The type of the input elements
  */
-public class TimestampsAndPeriodicWatermarksOperator<T>
-		extends AbstractUdfStreamOperator<T, AssignerWithPeriodicWatermarks<T>>
+public class TimestampsAndPeriodicWatermarksOperator<T, K, W extends Window>
+		extends AbstractUdfStreamOperator<T, AssignerWithPeriodicWatermarks<T>, K, W>
 		implements OneInputStreamOperator<T, T>, Triggerable {
 
 	private static final long serialVersionUID = 1L;

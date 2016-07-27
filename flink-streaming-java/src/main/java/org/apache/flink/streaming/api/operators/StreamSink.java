@@ -20,10 +20,11 @@ package org.apache.flink.streaming.api.operators;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
 @Internal
-public class StreamSink<IN> extends AbstractUdfStreamOperator<Object, SinkFunction<IN>>
+public class StreamSink<IN, K , W extends Window> extends AbstractUdfStreamOperator<Object, SinkFunction<IN>, K, W>
 		implements OneInputStreamOperator<IN, Object> {
 
 	private static final long serialVersionUID = 1L;

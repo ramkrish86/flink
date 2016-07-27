@@ -23,10 +23,11 @@ import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 
 @Internal
-public class AggregatingProcessingTimeWindowOperator<KEY, IN> 
-		extends AbstractAlignedProcessingTimeWindowOperator<KEY, IN, IN, IN, ReduceFunction<IN>> {
+public class AggregatingProcessingTimeWindowOperator<KEY, IN, K, W extends Window>
+		extends AbstractAlignedProcessingTimeWindowOperator<KEY, IN, IN, IN, ReduceFunction<IN>, K, W> {
 
 	private static final long serialVersionUID = 7305948082830843475L;
 

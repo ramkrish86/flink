@@ -53,7 +53,7 @@ public class DefaultTimeServiceProvider extends TimeServiceProvider {
 	@Override
 	public void shutdownService() throws Exception {
 		if (!timerService.isTerminated()) {
-			StreamTask.LOG.info("Timer service is shutting down.");
+			StreamTask.LOG.info("WindowTimer service is shutting down.");
 		}
 		timerService.shutdownNow();
 	}

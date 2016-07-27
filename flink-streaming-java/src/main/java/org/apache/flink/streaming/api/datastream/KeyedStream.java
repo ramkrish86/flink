@@ -254,7 +254,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
 	 * @return The transformed DataStream.
 	 */
 	public SingleOutputStreamOperator<T> reduce(ReduceFunction<T> reducer) {
-		return transform("Keyed Reduce", getType(), new StreamGroupedReduce<T>(
+		return transform("Keyed Reduce", getType(), new StreamGroupedReduce<>(
 				clean(reducer), getType().createSerializer(getExecutionConfig())));
 	}
 
@@ -511,7 +511,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
 	}
 
 	protected SingleOutputStreamOperator<T> aggregate(AggregationFunction<T> aggregate) {
-		StreamGroupedReduce<T> operator = new StreamGroupedReduce<T>(
+		StreamGroupedReduce<T, ? ,?> operator = new StreamGroupedReduce<>(
 				clean(aggregate), getType().createSerializer(getExecutionConfig()));
 		return transform("Keyed Aggregation", getType(), operator);
 	}

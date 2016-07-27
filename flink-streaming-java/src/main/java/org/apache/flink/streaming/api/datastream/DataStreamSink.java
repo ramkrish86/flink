@@ -35,7 +35,7 @@ public class DataStreamSink<T> {
 	SinkTransformation<T> transformation;
 
 	@SuppressWarnings("unchecked")
-	protected DataStreamSink(DataStream<T> inputStream, StreamSink<T> operator) {
+	protected DataStreamSink(DataStream<T> inputStream, StreamSink<T, ?, ?> operator) {
 		this.transformation = new SinkTransformation<T>(inputStream.getTransformation(), "Unnamed", operator, inputStream.getExecutionEnvironment().getParallelism());
 	}
 

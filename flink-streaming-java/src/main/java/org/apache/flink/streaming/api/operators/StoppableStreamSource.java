@@ -19,6 +19,7 @@ package org.apache.flink.streaming.api.operators;
 
 import org.apache.flink.api.common.functions.StoppableFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 
 /**
  * {@link StoppableStreamSource} takes a {@link SourceFunction} that implements {@link StoppableFunction}.
@@ -26,8 +27,8 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
  * @param <OUT> Type of the output elements
  * @param <SRC> Type of the source function which has to be stoppable
  */
-public class StoppableStreamSource<OUT, SRC extends SourceFunction<OUT> & StoppableFunction>
-	extends StreamSource<OUT, SRC> {
+public class StoppableStreamSource<OUT, SRC extends SourceFunction<OUT> & StoppableFunction, K, W extends Window>
+	extends StreamSource<OUT, SRC, K, W> {
 
 	private static final long serialVersionUID = -4365670858793587337L;
 

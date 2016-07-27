@@ -22,11 +22,12 @@ import org.apache.flink.streaming.api.functions.co.CoMapFunction;
 import org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator;
 import org.apache.flink.streaming.api.operators.TwoInputStreamOperator;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
 @Internal
-public class CoStreamMap<IN1, IN2, OUT>
-		extends AbstractUdfStreamOperator<OUT, CoMapFunction<IN1, IN2, OUT>>
+public class CoStreamMap<IN1, IN2, OUT, K, W extends Window>
+		extends AbstractUdfStreamOperator<OUT, CoMapFunction<IN1, IN2, OUT>, K, W>
 		implements TwoInputStreamOperator<IN1, IN2, OUT> {
 
 	private static final long serialVersionUID = 1L;

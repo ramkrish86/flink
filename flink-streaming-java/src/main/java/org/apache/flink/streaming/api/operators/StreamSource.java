@@ -21,6 +21,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.operators.Triggerable;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
@@ -33,8 +34,8 @@ import java.util.concurrent.ScheduledFuture;
  * @param <SRC> Type of the source function of this stream source operator
  */
 @Internal
-public class StreamSource<OUT, SRC extends SourceFunction<OUT>> 
-		extends AbstractUdfStreamOperator<OUT, SRC> implements StreamOperator<OUT> {
+public class StreamSource<OUT, SRC extends SourceFunction<OUT>, K, W extends Window>
+		extends AbstractUdfStreamOperator<OUT, SRC, K, W> implements StreamOperator<OUT> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -141,12 +142,12 @@ public class StreamSource<OUT, SRC extends SourceFunction<OUT>>
 	 */
 	public static class NonTimestampContext<T> implements SourceFunction.SourceContext<T> {
 
-		private final StreamSource<?, ?> owner;
+		private final StreamSource<?, ?, ?, ?> owner;
 		private final Object lockingObject;
 		private final Output<StreamRecord<T>> output;
 		private final StreamRecord<T> reuse;
 
-		public NonTimestampContext(StreamSource<?, ?> owner, Object lockingObject, Output<StreamRecord<T>> output) {
+		public NonTimestampContext(StreamSource<?, ?, ?, ?> owner, Object lockingObject, Output<StreamRecord<T>> output) {
 			this.owner = owner;
 			this.lockingObject = lockingObject;
 			this.output = output;
@@ -188,7 +189,7 @@ public class StreamSource<OUT, SRC extends SourceFunction<OUT>>
 	 */
 	public static class AutomaticWatermarkContext<T> implements SourceFunction.SourceContext<T> {
 
-		private final StreamSource<?, ?> owner;
+		private final StreamSource<?, ?, ?, ?> owner;
 		private final Object lockingObject;
 		private final Output<StreamRecord<T>> output;
 		private final StreamRecord<T> reuse;
@@ -199,7 +200,7 @@ public class StreamSource<OUT, SRC extends SourceFunction<OUT>>
 		private volatile long nextWatermarkTime;
 
 		public AutomaticWatermarkContext(
-				final StreamSource<?, ?> owner,
+				final StreamSource<?, ?, ?, ?> owner,
 				final Object lockingObjectParam,
 				final Output<StreamRecord<T>> outputParam,
 				final long watermarkInterval) {
@@ -276,11 +277,11 @@ public class StreamSource<OUT, SRC extends SourceFunction<OUT>>
 
 		private class WatermarkEmittingTask implements Triggerable {
 
-			private final StreamSource<?, ?> owner;
+			private final StreamSource<?, ?, ?, ?> owner;
 			private final Object lockingObject;
 			private final Output<StreamRecord<T>> output;
 
-			private WatermarkEmittingTask(StreamSource<?, ?> src, Object lock, Output<StreamRecord<T>> output) {
+			private WatermarkEmittingTask(StreamSource<?, ?, ?, ?> src, Object lock, Output<StreamRecord<T>> output) {
 				this.owner = src;
 				this.lockingObject = lock;
 				this.output = output;
@@ -320,12 +321,12 @@ public class StreamSource<OUT, SRC extends SourceFunction<OUT>>
 	 */
 	public static class ManualWatermarkContext<T> implements SourceFunction.SourceContext<T> {
 
-		private final StreamSource<?, ?> owner;
+		private final StreamSource<?, ?, ?, ?> owner;
 		private final Object lockingObject;
 		private final Output<StreamRecord<T>> output;
 		private final StreamRecord<T> reuse;
 
-		public ManualWatermarkContext(StreamSource<?, ?> owner, Object lockingObject, Output<StreamRecord<T>> output) {
+		public ManualWatermarkContext(StreamSource<?, ?, ?, ?> owner, Object lockingObject, Output<StreamRecord<T>> output) {
 			this.owner = owner;
 			this.lockingObject = lockingObject;
 			this.output = output;

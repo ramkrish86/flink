@@ -21,6 +21,7 @@ import org.apache.flink.api.common.functions.StoppableFunction;
 import org.apache.flink.runtime.jobgraph.tasks.StoppableTask;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.operators.StoppableStreamSource;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 
 /**
  * Stoppable task for executing stoppable streaming sources.
@@ -28,8 +29,8 @@ import org.apache.flink.streaming.api.operators.StoppableStreamSource;
  * @param <OUT> Type of the produced elements
  * @param <SRC> Stoppable source function
  */
-public class StoppableSourceStreamTask<OUT, SRC extends SourceFunction<OUT> & StoppableFunction>
-	extends SourceStreamTask<OUT, SRC, StoppableStreamSource<OUT, SRC>> implements StoppableTask {
+public class StoppableSourceStreamTask<OUT, SRC extends SourceFunction<OUT> & StoppableFunction, K, W extends Window>
+	extends SourceStreamTask<OUT, SRC, StoppableStreamSource<OUT, SRC, K, W>, K, W> implements StoppableTask {
 
 	private volatile boolean stopped;
 

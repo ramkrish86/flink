@@ -723,7 +723,7 @@ public class DataStream<T> {
 		// behaviour: the watermark will creep along very slowly because the elements
 		// from the source go to each extraction operator round robin.
 		int inputParallelism = getTransformation().getParallelism();
-		ExtractTimestampsOperator<T> operator = new ExtractTimestampsOperator<>(clean(extractor));
+		ExtractTimestampsOperator<T, ? ,?> operator = new ExtractTimestampsOperator<>(clean(extractor));
 		return transform("ExtractTimestamps", getTransformation().getOutputType(), operator)
 				.setParallelism(inputParallelism);
 	}
@@ -768,7 +768,7 @@ public class DataStream<T> {
 		final int inputParallelism = getTransformation().getParallelism();
 		final AssignerWithPeriodicWatermarks<T> cleanedAssigner = clean(timestampAndWatermarkAssigner);
 		
-		TimestampsAndPeriodicWatermarksOperator<T> operator = 
+		TimestampsAndPeriodicWatermarksOperator<T, ?, ?> operator =
 				new TimestampsAndPeriodicWatermarksOperator<>(cleanedAssigner);
 		
 		return transform("Timestamps/Watermarks", getTransformation().getOutputType(), operator)
@@ -811,7 +811,7 @@ public class DataStream<T> {
 		final int inputParallelism = getTransformation().getParallelism();
 		final AssignerWithPunctuatedWatermarks<T> cleanedAssigner = clean(timestampAndWatermarkAssigner);
 
-		TimestampsAndPunctuatedWatermarksOperator<T> operator = 
+		TimestampsAndPunctuatedWatermarksOperator<T, ?, ?> operator =
 				new TimestampsAndPunctuatedWatermarksOperator<>(cleanedAssigner);
 		
 		return transform("Timestamps/Watermarks", getTransformation().getOutputType(), operator)
@@ -1073,7 +1073,7 @@ public class DataStream<T> {
 			((InputTypeConfigurable) sinkFunction).setInputType(getType(), getExecutionConfig() );
 		}
 
-		StreamSink<T> sinkOperator = new StreamSink<>(clean(sinkFunction));
+		StreamSink<T, ? ,?> sinkOperator = new StreamSink<>(clean(sinkFunction));
 
 		DataStreamSink<T> sink = new DataStreamSink<>(this, sinkOperator);
 

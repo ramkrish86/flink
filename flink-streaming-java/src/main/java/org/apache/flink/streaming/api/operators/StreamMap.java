@@ -20,11 +20,12 @@ package org.apache.flink.streaming.api.operators;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.watermark.Watermark;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 
 @Internal
-public class StreamMap<IN, OUT>
-		extends AbstractUdfStreamOperator<OUT, MapFunction<IN, OUT>>
+public class StreamMap<IN, OUT, K, W extends Window>
+		extends AbstractUdfStreamOperator<OUT, MapFunction<IN, OUT>, K, W>
 		implements OneInputStreamOperator<IN, OUT> {
 
 	private static final long serialVersionUID = 1L;

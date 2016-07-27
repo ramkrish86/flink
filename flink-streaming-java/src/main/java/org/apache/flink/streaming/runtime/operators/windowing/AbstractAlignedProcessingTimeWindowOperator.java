@@ -26,6 +26,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.core.memory.DataInputView;
 import org.apache.flink.runtime.state.StateHandle;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.util.MathUtils;
 import org.apache.flink.streaming.api.operators.AbstractUdfStreamOperator;
 import org.apache.flink.streaming.api.operators.TimestampedCollector;
@@ -40,8 +41,8 @@ import org.apache.flink.streaming.runtime.tasks.StreamTaskState;
 import static java.util.Objects.requireNonNull;
 
 @Internal
-public abstract class AbstractAlignedProcessingTimeWindowOperator<KEY, IN, OUT, STATE, F extends Function> 
-		extends AbstractUdfStreamOperator<OUT, F> 
+public abstract class AbstractAlignedProcessingTimeWindowOperator<KEY, IN, OUT, STATE, F extends Function, K, W extends Window>
+		extends AbstractUdfStreamOperator<OUT, F, K, W>
 		implements OneInputStreamOperator<IN, OUT>, Triggerable {
 	
 	private static final long serialVersionUID = 3245500864882459867L;

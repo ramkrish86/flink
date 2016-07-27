@@ -77,7 +77,7 @@ public class StreamTaskTimerITCase extends StreamingMultipleProgramsTestBase {
 
 		boolean testSuccess = false;
 		try {
-			env.execute("Timer test");
+			env.execute("WindowTimer test");
 		} catch (JobExecutionException e) {
 			if (e.getCause() instanceof TimerException) {
 				TimerException te = (TimerException) e.getCause();
@@ -114,7 +114,7 @@ public class StreamTaskTimerITCase extends StreamingMultipleProgramsTestBase {
 
 		boolean testSuccess = false;
 		try {
-			env.execute("Timer test");
+			env.execute("WindowTimer test");
 		} catch (JobExecutionException e) {
 			if (e.getCause() instanceof TimerException) {
 				TimerException te = (TimerException) e.getCause();
@@ -150,7 +150,7 @@ public class StreamTaskTimerITCase extends StreamingMultipleProgramsTestBase {
 
 		boolean testSuccess = false;
 		try {
-			env.execute("Timer test");
+			env.execute("WindowTimer test");
 		} catch (JobExecutionException e) {
 			if (e.getCause() instanceof TimerException) {
 				TimerException te = (TimerException) e.getCause();
